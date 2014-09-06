@@ -1,0 +1,23 @@
+{
+  "name": "nw-wrap",
+  "version": "0.0.0",
+  "description": "node-webkit wrapper to recover stdin and stderr",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/spelufo/nw-wrap"
+  },
+  "keywords": [
+    "node-webkit",
+    "stdin",
+    "stderr",
+    "args",
+    "wrapper"
+  ],
+  "author": "Santiago Pelufo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spelufo/nw-wrap/issues"
+  },
+  "homepage": "https://github.com/spelufo/nw-wrap"
+}
