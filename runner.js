@@ -1,33 +1,38 @@
 var child = require('child_process');
-var nw = child.spawn(process.env.NW_CMD || 'node-webkit', process.argv.slice(2));
-
-process.on('exit', function () {
-  nw.kill();
-});
-
 var net = require('net');
 
-// nw stdout works fine, use it
-nw.stdout.pipe(process.stdout);
+// argv
+var env = process.env;
+env.ARGS = JSON.stringify(process.argv);
+env.STDIN_PORT = process.env.STDIN_PORT || '3784';
 
-var net = require('net');
+var nw = child.spawn( process.env.NW_CMD || 'node-webkit',
+                      process.argv.slice(2),
+                      { env: env } );
 
+// exit
+process.on('exit', function () { nw.kill(); });
+nw.on('close', function (code) { process.exit(code) });
+
+
+// stdin
 // circumvent nw broken stdin by pipeing process.stdin to
 // a socket that you can connect to from inside nw.
-var STDIN_PORT = process.env.STDIN_PORT || 3784;
-var stdin_server = net.createServer(function (socket) {
+net.createServer(function (socket) {
   process.stdin.pipe(socket);
-}).listen(STDIN_PORT);
+}).listen(env.STDIN_PORT);
 
 
-
-var STDERR_PORT = process.env.STDERR_PORT;
-if (STDERR_PORT) {
-  var stderr = net.createServer(function (socket) {
-    socket.pipe(process.stderr);
-  }).listen(STDERR_PORT);
-} else {
-  // set it to 0 to supress nw's stderr
-  if (STDERR_PORT !== '0')
-    nw.stderr.pipe(process.stderr);
+function setup (PORT, i, o) {
+  if (PORT) {
+    return net.createServer(function (socket) {
+      socket.pipe(o);
+    }).listen(PORT);
+  } else {
+    if (PORT !== '0') // set it to 0 to supress nw's stdout
+      i.pipe(o);
+  }
 }
+
+setup(env.STDOUT_PORT, nw.stdout, process.stdout);
+setup(env.STDERR_PORT, nw.stderr, process.stderr);

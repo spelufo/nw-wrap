@@ -4,21 +4,23 @@ var nwwr = module.exports = {};
 for (var p in process)
   nwwr[p] = process[p];
 
-var STDIN_PORT = process.env.STDIN_PORT || 3784;
-nwwr.stdin = net.createConnection({port: STDIN_PORT}, function () {
-  console.log('stdin connected on port ', STDIN_PORT);
-});
-nwwr.stdin.on('error', function (err) {
-  console.log('Failed to connect to stdin server on port ' + STDIN_PORT + '. '+ err.code);
-});
+nwwr.argv = JSON.parse(process.env.ARGS);
 
+function setup (PORT, id) {
+  if (PORT) {
+    var c = net.createConnection({port: PORT}, function () {
+      console.log(id + ' connected on port ', PORT);
+    });
 
-var STDERR_PORT = process.env.STDERR_PORT;
-if (STDERR_PORT) {
-  nwwr.stderr = net.createConnection({port: STDERR_PORT}, function () {
-    console.log('stderr connected on port ', STDERR_PORT);
-  });
-  nwwr.stderr.on('error', function (err) {
-    console.log('Failed to connect to stderr server on port ' + STDERR_PORT + '. '+ err.code);
-  });
+    c.on('error', function (err) {
+      console.log('Failed to connect ' + id + ' on port ' + PORT + '. '+ err.code);
+    });
+    return c;
+  }
 }
+
+nwwr.stdin = setup(process.env.STDIN_PORT, 'stdin');
+nwwr.stdout = setup(process.env.STDOUT_PORT, 'stdout') || nwwr.stdout;
+nwwr.stderr = setup(process.env.STDERR_PORT, 'stderr') || nwwr.stderr;
+
+
