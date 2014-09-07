@@ -5,9 +5,12 @@ There are various open issues in node-webkit's github page regarging problems wi
 
 ## Usage
 
+
 There are two parts to it. `runner.js` is what you execute as the parent process:
 
 ```bash
+npm install nw-wrap
+ln -s node_modules/nw-wrap/runner.js # or copy it.
 node runner.js args to node webkit and your app
 ```
 
@@ -37,3 +40,9 @@ not necessary, since you can feed yargs any object, so I just pass it `nwwr.argv
 ## Licence
 
 MIT
+
+
+[1]: https://github.com/rogerwang/node-webkit/issues/586
+[2]: https://github.com/rogerwang/node-webkit/issues/343
+[3]: https://github.com/rogerwang/node-webkit/issues/1929
+[4]: https://github.com/rogerwang/node-webkit/issues/1643
