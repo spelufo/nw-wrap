@@ -1,8 +1,9 @@
 {
   "name": "nw-wrap",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "node-webkit wrapper to recover stdin and stderr",
   "main": "main.js",
+  "bin": "bin/nw-wrap",
   "repository": {
     "type": "git",
     "url": "http://github.com/spelufo/nw-wrap"

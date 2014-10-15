@@ -9,11 +9,11 @@ nwwr.argv = JSON.parse(process.env.ARGS);
 function setup (PORT, id) {
   if (PORT) {
     var c = net.createConnection({port: PORT}, function () {
-      console.log(id + ' connected on port ', PORT);
+      console.log('nw-wrap:', id + ' connected on port ', PORT);
     });
 
     c.on('error', function (err) {
-      console.log('Failed to connect ' + id + ' on port ' + PORT + '. '+ err.code);
+      throw new Error('nw-wrap: Failed to connect ' + id + ' on port ' + PORT + '. '+ err.code);
     });
     return c;
   }
