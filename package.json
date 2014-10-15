@@ -1,6 +1,6 @@
 {
   "name": "nw-wrap",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "node-webkit wrapper to recover stdin and stderr",
   "main": "main.js",
   "bin": "bin/nw-wrap",
